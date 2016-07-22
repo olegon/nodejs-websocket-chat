@@ -1,16 +1,18 @@
-require('./normalize.css');
-require('./animation.css');
-require('./style.css');
+import './normalize.css';
+import './animation.css';
+import './style.css';
 
-var $ = require('jQuery');
-var io = require('socket.io-client');
+import $ from 'jQuery';
+import io from 'socket.io-client';
+import { watcher } from './typing-control.js';
 
 $(function () {
-    var socket = io();
+    const socket = io();
 
-    var $chat = $('.chat-messages');
-    var $input = $('.chat-input-text');
-    var $form = $('.chat-input-form');
+    const $chat = $('.chat-messages');
+    const $input = $('.chat-input-text');
+    const $form = $('.chat-input-form');
+    const typingWatcher = watcher();
 
     function scrollToBottom() {
         var chat = $chat.get(0);
@@ -44,6 +46,23 @@ $(function () {
         scrollToBottom();
     });
 
+    socket.on('begin-typing', function (data) {
+        console.log('begin-typing', data);
+        $('.user-typing')
+            .css({
+                'opacity': '1.0'
+            })
+            .text(`O usuário ${data.username} está digitando.`);
+    });
+
+    socket.on('end-typing', function (data) {
+        console.log('end-typing', data);
+        $('.user-typing')
+            .css({
+                'opacity': '0.0'
+            })
+            .text('');
+    });
 
     $input.on('keydown', function(e) {
         if (e.keyCode == 13) {
@@ -52,9 +71,23 @@ $(function () {
         }
     });
 
+    $input.on('input', function (e) {
+        typingWatcher.activeTyping();
+    });
+
     $form.on('submit', function(e) {
         e.preventDefault();
         enviarMensagem();
+    });
+
+    typingWatcher.addEventListener('begin-typing', function () {
+        console.log('begin-typing');
+        socket.emit('begin-typing');
+    });
+
+    typingWatcher.addEventListener('end-typing', function (dta) {
+        console.log('end-typing');
+        socket.emit('end-typing');
     });
 
     function enviarMensagem() {

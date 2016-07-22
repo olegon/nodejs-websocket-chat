@@ -40,11 +40,33 @@ io.on('connection', function(socket) {
         }
     });
 
+    socket.on('begin-typing', function () {
+        console.log(`${user.username} começou a digitar.`);
+        setData(socket.broadcast, 'begin-typing', {
+            username: user.username
+        });
+    });
+
+    socket.on('end-typing', function () {
+        setData(socket.broadcast, 'end-typing', {
+            username: user.username
+        });
+    });
+
     sendMessage(socket, serverBot, `Esse chat foi escrito com Node.js, Socket.io, Webpack, Babel-ES6 e Flexbox. :)`);
 
     sendMessage(socket, serverBot, `Use o comando "\\n <username>" para alterar o seu username.`);
 
     broadcastMessage(serverBot, `O usuário ${user.username} entrou na sala.`);
+
+
+
+    function setData(emitter, eventType, data) {
+        console.log(eventType, data);
+        
+
+        emitter.emit(eventType, data);
+    }
 
 
     function broadcastMessage(usuario, mensagem) {
