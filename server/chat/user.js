@@ -1,29 +1,20 @@
-"use strict";
-
-module.exports = {
-    novo: novo,
-    getRandomNumber: getRandomNumber,
-    getRandomColor: getRandomColor,
-    genRandomName: genRandomName
-};
-
-function novo(username, color) {
+export function create(username, color) {
     return {
         username: username || genRandomName(),
         color: color || getRandomColor()
     };
 }
 
-function getRandomNumber() {
+export function getRandomNumber() {
     return Math.ceil(127 + (Math.random() * 100) % 64);
 }
 
-function getRandomColor() {
+export function getRandomColor() {
     return `rgb(${getRandomNumber()}, ${getRandomNumber()}, ${getRandomNumber()})`;
 }
 
 let counter = 0;
 
-function genRandomName() {
+export function genRandomName() {
     return `User#${counter++}`;
 }

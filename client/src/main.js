@@ -23,7 +23,7 @@ $(function () {
         scrollToBottom();
     });
 
-    socket.on('new-message', function(chatMessage) {
+    socket.on('user-message', function(chatMessage) {
         var html = (
             `<div class="chat-message">
                 <div class="username"></div>
@@ -46,8 +46,8 @@ $(function () {
         scrollToBottom();
     });
 
-    socket.on('begin-typing', function (data) {
-        console.log('begin-typing', data);
+    socket.on('user-begin-typing', function (data) {
+        console.log('user-begin-typing', data);
         $('.user-typing')
             .css({
                 'opacity': '1.0'
@@ -55,8 +55,8 @@ $(function () {
             .text(`O usuário ${data.username} está digitando.`);
     });
 
-    socket.on('end-typing', function (data) {
-        console.log('end-typing', data);
+    socket.on('user-end-typing', function (data) {
+        console.log('user-end-typing', data);
         $('.user-typing')
             .css({
                 'opacity': '0.0'
@@ -80,21 +80,21 @@ $(function () {
         enviarMensagem();
     });
 
-    typingWatcher.addEventListener('begin-typing', function () {
-        console.log('begin-typing');
-        socket.emit('begin-typing');
+    typingWatcher.addEventListener('user-begin-typing', function () {
+        console.log('user-begin-typing');
+        socket.emit('user-begin-typing');
     });
 
-    typingWatcher.addEventListener('end-typing', function (dta) {
-        console.log('end-typing');
-        socket.emit('end-typing');
+    typingWatcher.addEventListener('user-end-typing', function (dta) {
+        console.log('user-end-typing');
+        socket.emit('user-end-typing');
     });
 
     function enviarMensagem() {
         var mensagem = $input.val();
 
         if (mensagem != '') {
-            socket.emit('new-message', mensagem);
+            socket.emit('user-message', mensagem);
 
             $input.val('');
         }

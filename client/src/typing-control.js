@@ -30,10 +30,10 @@ export function watcher () {
         },
         addEventListener: (type, listener) => {
             switch (type) {
-                case 'begin-typing':
+                case 'user-begin-typing':
                     beginTypingListeners.push(listener);
                     break;
-                case 'end-typing':
+                case 'user-end-typing':
                     endTypingListeners.push(listener);
                     break;
             }

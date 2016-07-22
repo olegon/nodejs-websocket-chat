@@ -1,21 +1,58 @@
-"use strict";
-
 const path = require('path');
-
 const express = require('express');
 const expressApp = express();
 const httpServer = require('http').Server(expressApp);
 const io = require('socket.io')(httpServer);
 
-const usuario = require('./usuario');
+import { user, handlers } from './chat';
 
-expressApp.use('/static', express.static(path.join(__dirname, '../client/dist')));
+(function expressSetup() {
 
-expressApp.get('/', function(req, res) {
-    res.sendFile(path.join(__dirname, '../client/dist/index.html'));
-});
+    expressApp.use('/static', express.static(path.join(__dirname, '../client/dist')));
 
-const serverBot = usuario.novo('* Server BOT *', '#c00');
+    expressApp.get('/', function(req, res) {
+        res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+    });
+
+})();
+
+(function ioSetup() {
+
+    io.on('connection', (socket) => {
+
+        const user = user.create();
+
+        socket.on('disconnect', () => {
+            handlers.handleUserDisconnect(user, (data) => {
+                socket.emit('user-disconnect', data);
+            });
+        });
+
+        socket.on('user-message', (message) => {
+            handlers.handleUserMessage(user, message, (data) => {
+                socket.emit('user-message', data);
+            });
+        });
+
+        socket.on('user-begin-typing', () => {
+            handlers.handleUserBeginTyping(user, (data) => {
+
+            });
+        });
+
+        socket.on('user-end-typing', () => {
+            handlers.handleUserEndTyping(user, (data) => {
+
+            });
+        });
+
+    });
+
+})();
+
+// const serverBot = usuario.novo('* Server BOT *', '#c00');
+
+/*
 
 io.on('connection', function(socket) {
     const user = usuario.novo();
@@ -26,7 +63,7 @@ io.on('connection', function(socket) {
         sendMessage(socket.broadcast, serverBot, `O usuário ${user.username} saiu da sala.`);
     });
 
-    socket.on('new-message', function(message) {
+    socket.on('user-message', function(message) {
         const match = newNickRegex.exec(message);
 
         if (match) {
@@ -40,15 +77,15 @@ io.on('connection', function(socket) {
         }
     });
 
-    socket.on('begin-typing', function () {
+    socket.on('user-begin-typing', function() {
         console.log(`${user.username} começou a digitar.`);
-        setData(socket.broadcast, 'begin-typing', {
+        setData(socket.broadcast, 'user-begin-typing', {
             username: user.username
         });
     });
 
-    socket.on('end-typing', function () {
-        setData(socket.broadcast, 'end-typing', {
+    socket.on('user-end-typing', function() {
+        setData(socket.broadcast, 'user-end-typing', {
             username: user.username
         });
     });
@@ -80,8 +117,10 @@ io.on('connection', function(socket) {
             message: mensagem
         };
 
-        socket.emit('new-message', message);
+        socket.emit('user-message', message);
     }
 });
+
+*/
 
 module.exports = httpServer;
