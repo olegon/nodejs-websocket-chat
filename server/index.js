@@ -23,7 +23,7 @@ io.on('connection', function(socket) {
     const newNickRegex = /^\\n\s([a-záàâãéèêíïóôõöúçñ_]{1,32})$/i;
 
     socket.on('disconnect', function() {
-        broadcastMessage(serverBot, `O usuário ${user.username} saiu da sala.`);
+        sendMessage(socket.broadcast, serverBot, `O usuário ${user.username} saiu da sala.`);
     });
 
     socket.on('new-message', function(message) {
@@ -57,13 +57,13 @@ io.on('connection', function(socket) {
 
     sendMessage(socket, serverBot, `Use o comando "\\n <username>" para alterar o seu username.`);
 
-    broadcastMessage(serverBot, `O usuário ${user.username} entrou na sala.`);
+    sendMessage(socket.broadcast, serverBot, `O usuário ${user.username} entrou na sala.`);
 
 
 
     function setData(emitter, eventType, data) {
         console.log(eventType, data);
-        
+
 
         emitter.emit(eventType, data);
     }
