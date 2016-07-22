@@ -40,7 +40,7 @@ io.on('connection', function(socket) {
         }
     });
 
-    sendMessage(socket, serverBot, `Esse chat foi escrito com Node.js, Socket.io, Webpack e Babel-ES6. :)`);
+    sendMessage(socket, serverBot, `Esse chat foi escrito com Node.js, Socket.io, Webpack, Babel-ES6 e Flexbox. :)`);
 
     broadcastMessage(serverBot, `O usuário ${user.username} entrou na sala.`);
 
