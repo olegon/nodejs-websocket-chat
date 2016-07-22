@@ -24,8 +24,8 @@ $(function () {
     socket.on('new-message', function(chatMessage) {
         var html = (
             '<div class="chat-message">' +
-            '<div class="username"></div>' +
-            '<div class="message"></div>' +
+                '<div class="username"></div>' +
+                '<div class="message"></div>' +
             '</div>'
         );
 

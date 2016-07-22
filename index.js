@@ -40,16 +40,23 @@ io.on('connection', function(socket) {
         }
     });
 
+    sendMessage(socket, serverBot, `Esse chat foi escrito com Node.js, Socket.io, Webpack e Babel-ES6.`);
+
     broadcastMessage(serverBot, `O usuário ${user.username} entrou na sala.`);
 
+
     function broadcastMessage(usuario, mensagem) {
+        sendMessage(io, usuario, mensagem);
+    }
+
+    function sendMessage(socket, usuario, mensagem) {
         const message = {
             username: usuario.username,
             color: usuario.color,
             message: mensagem
         };
 
-        io.emit('new-message', message);
+        socket.emit('new-message', message);
     }
 });
 
