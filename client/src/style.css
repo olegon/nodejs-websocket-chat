@@ -3,16 +3,13 @@
 }
 
 ::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-    -webkit-border-radius: 10px;
     border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-    -webkit-border-radius: 10px;
     border-radius: 10px;
     background: rgba(137, 40, 170, 0.8);
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
 }
 
 ::-webkit-scrollbar-thumb:window-inactive {
@@ -32,8 +29,6 @@ html {
 
 body {
     background: #5f2c82;
-    background: -webkit-linear-gradient(270deg, #5f2c82, #49a09d);
-    background: -webkit-linear-gradient(right, #5f2c82, #49a09d);
     background: linear-gradient(270deg, #5f2c82, #49a09d);
     min-height: 100%;
 }
