@@ -7,58 +7,50 @@ const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
-const getName = (() => {
-    let counter = 0;
+const usuario = require('./usuario');
 
-    return () => `User#${counter++}`;
-})();
-
-const getRandomNumber = () => Math.ceil(127 + (Math.random() * 100) % 64);
-const getRandomColor = () => `rgb(${getRandomNumber()}, ${getRandomNumber()}, ${getRandomNumber()})`;
-
-app.use('/static', express.static(__dirname + '/client'));
+app.use('/static', express.static(path.join(__dirname, '/client/dist')));
 
 app.get('/', function(req, res) {
-    res.sendfile(path.join(__dirname, 'client/index.html'));
+    res.sendFile(path.join(__dirname, 'client/dist/index.html'));
 });
 
+const serverBot = usuario.novo('Server BOT', '#c00');
+
 io.on('connection', function(socket) {
-    let username = getName();
-    const color = getRandomColor();
+    const user = usuario.novo();
+
     const newNickRegex = /^\\n\s([a-záàâãéèêíïóôõöúçñ_]{1,32})$/i;
 
     socket.on('disconnect', function() {
-
+        broadcastMessage(serverBot, `O usuário ${user.username} saiu da sala.`);
     });
 
-    socket.on('chat message', function(message) {
+    socket.on('new-message', function(message) {
         const match = newNickRegex.exec(message);
 
         if (match) {
             const newUsername = match[1];
 
-            io.emit('chat message', {
-                username: 'Server BOT',
-                color: '#c00',
-                message: `O usuário "${username}" trocou seu nome para "${newUsername}"`
-            });
+            broadcastMessage(serverBot, `O usuário "${user.username}" trocou seu nome para "${newUsername}"`);
 
-            username = newUsername;
-        }
-        else {
-            io.emit('chat message', {
-                username: username,
-                color: color,
-                message: message
-            });
+            user.username = newUsername;
+        } else {
+            broadcastMessage(user, message);
         }
     });
 
-    io.emit('chat message', {
-        username: '# Server BOT',
-        color: '#c00',
-        message: `O usuário ${username} entrou na sala.`
-    });
+    broadcastMessage(serverBot, `O usuário ${user.username} entrou na sala.`);
+
+    function broadcastMessage(usuario, mensagem) {
+        const message = {
+            username: usuario.username,
+            color: usuario.color,
+            message: mensagem
+        };
+
+        io.emit('new-message', message);
+    }
 });
 
 http.listen(3000, function() {

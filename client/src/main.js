@@ -1,4 +1,11 @@
-(function() {
+require('./normalize.css');
+require('./animation.css');
+require('./style.css');
+
+var $ = require('jQuery');
+var io = require('socket.io-client');
+
+$(function () {
     var socket = io();
 
     var $chat = $('.chat-messages');
@@ -14,11 +21,11 @@
         scrollToBottom();
     });
 
-    socket.on('chat message', function(chatMessage) {
+    socket.on('new-message', function(chatMessage) {
         var html = (
             '<div class="chat-message">' +
-                '<div class="username"></div>' +
-                '<div class="message"></div>' +
+            '<div class="username"></div>' +
+            '<div class="message"></div>' +
             '</div>'
         );
 
@@ -54,9 +61,9 @@
         var mensagem = $input.val();
 
         if (mensagem != '') {
-            socket.emit('chat message', mensagem);
+            socket.emit('new-message', mensagem);
 
             $input.val('');
         }
     }
-})();
+});

@@ -19,8 +19,6 @@
 	background: rgba(137, 40, 170, 0.8);
 }
 
-
-
 html {
     box-sizing: border-box;
     height: 100%;
@@ -34,9 +32,9 @@ html {
 
 body {
     background: #5f2c82;
-    background: -webkit-linear-gradient(270deg,#5f2c82,#49a09d);
-    background: -webkit-linear-gradient(right,#5f2c82,#49a09d);
-    background: linear-gradient(270deg,#5f2c82,#49a09d);
+    background: -webkit-linear-gradient(270deg, #5f2c82, #49a09d);
+    background: -webkit-linear-gradient(right, #5f2c82, #49a09d);
+    background: linear-gradient(270deg, #5f2c82, #49a09d);
     min-height: 100%;
 }
 
