@@ -10,7 +10,7 @@
         chat.scrollTop = chat.scrollHeight;
     }
 
-    window.addEventListener('resize', function (e) {
+    window.addEventListener('resize', function(e) {
         scrollToBottom();
     });
 
@@ -30,14 +30,15 @@
             })
             .text(chatMessage.username);
 
-        $('.message', $element).text(chatMessage.message);
+        $('.message', $element)
+            .text(chatMessage.message);
 
         $chat.append($element);
         scrollToBottom();
     });
 
 
-    $input.on('keydown', function (e) {
+    $input.on('keydown', function(e) {
         if (e.keyCode == 13) {
             e.preventDefault();
             enviarMensagem();
