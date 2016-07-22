@@ -42,6 +42,8 @@ io.on('connection', function(socket) {
 
     sendMessage(socket, serverBot, `Esse chat foi escrito com Node.js, Socket.io, Webpack, Babel-ES6 e Flexbox. :)`);
 
+    sendMessage(socket, serverBot, `Use o comando "\\n <username>" para alterar o seu username.`);
+
     broadcastMessage(serverBot, `O usuário ${user.username} entrou na sala.`);
 
 
