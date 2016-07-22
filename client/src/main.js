@@ -2,7 +2,7 @@ import './normalize.css';
 import './animation.css';
 import './style.css';
 
-import $ from 'jQuery';
+import $ from 'jquery';
 import io from 'socket.io-client';
 import { watcher } from './typing-control.js';
 

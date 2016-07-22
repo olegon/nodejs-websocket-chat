@@ -12,4 +12,6 @@ $ npm run build
 $ npm start
 ```
 
-- Acesse `http:\\localhost:3000` de um navegador.
+- Aparecerá a mensagem `Escutando na porta XXXX.`
+
+- Acesse `http:\\localhost:XXXX` de um navegador.

@@ -1,4 +1,4 @@
-export function create(username, color) {
+export function User(username, color) {
     return {
         username: username || genRandomName(),
         color: color || getRandomColor()

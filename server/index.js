@@ -1,10 +1,12 @@
-const path = require('path');
-const express = require('express');
-const expressApp = express();
-const httpServer = require('http').Server(expressApp);
-const io = require('socket.io')(httpServer);
+import path from 'path';
+import express from 'express';
+import http from 'http';
+import socket_io from 'socket.io';
+import * as chat from './chat';
 
-import { user, handlers } from './chat';
+const expressApp = express();
+const httpServer = http.Server(expressApp);
+const io = socket_io(httpServer);
 
 (function expressSetup() {
 
@@ -20,28 +22,28 @@ import { user, handlers } from './chat';
 
     io.on('connection', (socket) => {
 
-        const user = user.create();
+        const currentUser = chat.User();
 
         socket.on('disconnect', () => {
-            handlers.handleUserDisconnect(user, (data) => {
-                socket.emit('user-disconnect', data);
+            chat.handleUserDisconnect(currentUser, (data) => {
+                socket.emit(data.event, data);
             });
         });
 
         socket.on('user-message', (message) => {
-            handlers.handleUserMessage(user, message, (data) => {
-                socket.emit('user-message', data);
+            chat.handleUserMessage(currentUser, message, (data) => {
+                socket.emit(data.event, data);
             });
         });
 
         socket.on('user-begin-typing', () => {
-            handlers.handleUserBeginTyping(user, (data) => {
+            chat.handleUserBeginTyping(currentUser, (data) => {
 
             });
         });
 
         socket.on('user-end-typing', () => {
-            handlers.handleUserEndTyping(user, (data) => {
+            chat.handleUserEndTyping(currentUser, (data) => {
 
             });
         });
