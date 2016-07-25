@@ -9,10 +9,12 @@ import { watcher } from './typing-control.js';
 $(function () {
     const socket = io();
 
+    let iid = null;
     const $chat = $('.chat-messages');
     const $input = $('.chat-input-text');
     const $form = $('.chat-input-form');
     const typingWatcher = watcher();
+
 
     function scrollToBottom() {
         var chat = $chat.get(0);
@@ -21,6 +23,12 @@ $(function () {
 
     window.addEventListener('resize', function(e) {
         scrollToBottom();
+    });
+
+    socket.on('user-connect', function (data) {
+        console.log(data);
+
+        iid = data.iid;
     });
 
     socket.on('user-message', function(chatMessage) {
@@ -46,22 +54,43 @@ $(function () {
         scrollToBottom();
     });
 
-    socket.on('user-begin-typing', function (data) {
-        console.log('user-begin-typing', data);
-        $('.user-typing')
-            .css({
-                'opacity': '1.0'
-            })
-            .text(`O usuário ${data.username} está digitando.`);
-    });
+    socket.on('users-typing', function (data) {
+        console.log(data);
 
-    socket.on('user-end-typing', function (data) {
-        console.log('user-end-typing', data);
-        $('.user-typing')
-            .css({
-                'opacity': '0.0'
+        const $container = $('.user-typing');
+        $container.html('');
+
+        let template = `<span></span>`;
+
+        let users = data.users
+        .filter(({ iid: _iid } ) => _iid != iid);
+
+        if (users.length > 0) {
+            let template = `<span></span>`;
+
+            console.log(iid);
+
+            let $element = users
+            .map(({ username, color }) => {
+                let $element = $(template);
+
+                $element.text(`O usuário ${username} está digitando.`);
+
+                return $element;
             })
-            .text('');
+            .reduce(($final, $element) => {
+                return $final.append($element)
+            }, $container);
+
+            $container.css({
+                'opacity': '1.0'
+            });
+        }
+        else {
+            $container.css({
+                'opacity': '0.0'
+            });
+        }
     });
 
     $input.on('keydown', function(e) {
@@ -81,12 +110,12 @@ $(function () {
     });
 
     typingWatcher.addEventListener('user-begin-typing', function () {
-        console.log('user-begin-typing');
+        // console.log('user-begin-typing');
         socket.emit('user-begin-typing');
     });
 
-    typingWatcher.addEventListener('user-end-typing', function (dta) {
-        console.log('user-end-typing');
+    typingWatcher.addEventListener('user-end-typing', function () {
+        // console.log('user-end-typing');
         socket.emit('user-end-typing');
     });
 

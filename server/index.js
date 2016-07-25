@@ -9,7 +9,7 @@ const httpServer = http.Server(expressApp);
 const io = socket_io(httpServer);
 
 (function expressSetup() {
-    
+
     expressApp.use('/static', express.static(path.join(__dirname, '../client/dist')));
 
     expressApp.get('/', function(req, res) {
@@ -19,13 +19,14 @@ const io = socket_io(httpServer);
 })();
 
 (function ioSetup() {
+    let counter = 1;
 
     io.on('connection', (socket) => {
-
         const user = chat.User();
+        user.iid = counter++;
 
         chat.handleUserConnect(user, (data) => {
-
+            socket.emit(data.event, data);
         });
 
         socket.on('disconnect', () => {
@@ -42,13 +43,13 @@ const io = socket_io(httpServer);
 
         socket.on('user-begin-typing', () => {
             chat.handleUserBeginTyping(user, (data) => {
-
+                io.emit(data.event, data);
             });
         });
 
         socket.on('user-end-typing', () => {
             chat.handleUserEndTyping(user, (data) => {
-
+                io.emit(data.event, data);
             });
         });
 
