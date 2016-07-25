@@ -19,11 +19,8 @@ const io = socket_io(httpServer);
 })();
 
 (function ioSetup() {
-    let counter = 1;
-
     io.on('connection', (socket) => {
         const user = chat.User();
-        user.iid = counter++;
 
         chat.handleUserConnect(user, (data) => {
             socket.emit(data.event, data);

@@ -1,20 +1,35 @@
+let iid = 0;
+
 export function User(username, color) {
+    iid++;
+
     return {
-        username: username || genRandomName(),
-        color: color || getRandomColor()
+        iid,
+        username: username || getDefaultName(iid),
+        color: color || genColor()
     };
 }
 
-export function getRandomNumber() {
+export function getPublicUserInfo ({ iid, username, color }, ...objects) {
+    let publicInfo = {
+        iid,
+        username,
+        color
+    };
+
+    Object.assign(publicInfo, ...objects);
+
+    return publicInfo;
+}
+
+function genNumber() {
     return Math.ceil(127 + (Math.random() * 100) % 64);
 }
 
-export function getRandomColor() {
-    return `rgb(${getRandomNumber()}, ${getRandomNumber()}, ${getRandomNumber()})`;
+function genColor() {
+    return `rgb(${genNumber()}, ${genNumber()}, ${genNumber()})`;
 }
 
-let counter = 0;
-
-export function genRandomName() {
-    return `User#${counter++}`;
+function getDefaultName(iid) {
+    return `User#${iid}`;
 }
