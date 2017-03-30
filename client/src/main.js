@@ -55,32 +55,26 @@ $(function () {
     });
 
     socket.on('users-typing', function (data) {
-        console.log(data);
-
         const $container = $('.user-typing');
         $container.html('');
 
-        let template = `<span></span>`;
-
-        let users = data.users
+        const users = data.users
         .filter(({ iid: _iid } ) => _iid != iid);
 
         if (users.length > 0) {
-            let template = `<span></span>`;
+            const template = `<span></span>`;
 
-            console.log(iid);
-
-            let $element = users
-            .map(({ username, color }) => {
-                let $element = $(template);
+            users
+            .map(({ username }) => {
+                const $element = $(template);
 
                 $element.text(`O usuário ${username} está digitando.`);
 
                 return $element;
             })
-            .reduce(($final, $element) => {
-                return $final.append($element)
-            }, $container);
+            .forEach($element => {
+                $container.append($element)
+            });
 
             $container.css({
                 'opacity': '1.0'
@@ -110,12 +104,10 @@ $(function () {
     });
 
     typingWatcher.addEventListener('user-begin-typing', function () {
-        // console.log('user-begin-typing');
         socket.emit('user-begin-typing');
     });
 
     typingWatcher.addEventListener('user-end-typing', function () {
-        // console.log('user-end-typing');
         socket.emit('user-end-typing');
     });
 
