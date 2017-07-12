@@ -52,9 +52,8 @@ body {
     margin: 1em;
 }
 
-.chat-message .username,
-.chat-message .message  {
-    margin: 0.25em;
+.chat-message .message > p  {
+    margin: 0.25em 0;
 }
 
 .chat-message .message {

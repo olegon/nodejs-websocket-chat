@@ -8,7 +8,7 @@ export default class Form extends React.Component {
     }
 
     handleTyping (e) {
-        if (e.keyCode === 13) {
+        if (e.keyCode === 13 && !e.shiftKey) {
             e.preventDefault();
             this.sendMessage();
         }
@@ -31,8 +31,7 @@ export default class Form extends React.Component {
             <form
                 className="chat-input-form"
                 ref={ element => this.inputForm = element }
-                onSubmit={ e => this.handleSubmit(e) }>
-
+                onSubmit={ e => this.handleSubmit(e) } >
                 <textarea 
                     className="chat-input-text"
                     placeholder="Digite a sua mensagem aqui..."

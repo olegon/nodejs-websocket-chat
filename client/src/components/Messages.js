@@ -2,14 +2,14 @@ import React from 'react';
 
 export default class Messages extends React.Component {
     renderMessage (userMessage) {
-        const { message_id, username, message, color } = userMessage;
+        const { message_id, username, message = '', color } = userMessage;
         
         return (
             <div className="chat-message" ref={ message_id }>
                 <div className="username" style={ { color } }>{username}</div>
-                <div className="message">{message}</div>
+                <div className="message">{ message.split('\n').map(parag => <p>{ parag }</p>) }</div>
             </div>
-        )
+        );
     }
 
     componentDidUpdate () {
@@ -21,10 +21,7 @@ export default class Messages extends React.Component {
 
         return (
             <div className="chat-messages" ref={ element => this.chatMessages = element }>
-                {
-                    messages
-                    .map(message => this.renderMessage(message))
-                }
+                { messages.map(message => this.renderMessage(message)) }
             </div>
         );
     }
