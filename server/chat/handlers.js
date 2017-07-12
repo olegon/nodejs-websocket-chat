@@ -14,6 +14,7 @@ export function handleUserConnect(user, callback) {
 export function handleUserMessage(user, message, callback) {
     const eventObject = getPublicUserInfo(user, {
         event: 'user-message',
+        message_id: `${user.iid}-${Date.now()}`,
         message
     });
 

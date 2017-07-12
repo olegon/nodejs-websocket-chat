@@ -1,6 +1,6 @@
 # HTML5 WebSocket Chat
 
-Chat escrito com Node.js, Socket.io, Webpack, Babel-ES6 e Flexbox. :)
+Chat escrito com Node.js, Socket.io, Webpack, ES6, Flexbox e React!. :)
 
 ## Como iniciar o servidor?
 
