@@ -1,29 +1,36 @@
-"use strict";
-
 const path = require('path');
-const autoprefixer = require('autoprefixer');
-const precss = require('precss');
+
+var CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 
 module.exports = {
-    entry: './client/src/main.js',
+    entry: {
+        vendor: ['react', 'react-dom'],
+        main: './client/src/main.js',
+    },
     output: {
-        path: 'client/dist',
-        filename: "main.js"
+        path: path.resolve('./client/dist'),
+        filename: "[name].min.js"
     },
     module: {
-        loaders: [{
-            test: /\.css$/,
-            loader: "style!css!postcss"
-        },
-        {
-            test: /\.js$/,
-            loader: 'babel-loader',
-            query: {
-              presets: ['es2015', 'react']
+        rules: [
+            {
+                test: /\.css$/,
+                loader: "style-loader!css-loader!postcss-loader"
+            },
+            {
+                test: /\.jsx?$/,
+                loader: 'babel-loader',
+                exclude: /node_modules/,
+                options: { 
+                    presets: ['es2015', 'react'] 
+                }
             }
-          }]
+        ]
     },
-    postcss: function() {
-        return [precss, autoprefixer];
-    }
+    plugins: [
+        new CommonsChunkPlugin({
+            name: "vendor",
+            filename: "vendor.bundle.js"
+        })
+    ]
 };
