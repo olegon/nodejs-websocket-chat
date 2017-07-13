@@ -22,6 +22,12 @@ const io = socket_io(httpServer);
     io.on('connection', (socket) => {
         const user = chat.User();
 
+        // TODO: adicionar biblioteca para LOGS.
+        console.log('**************************************************')
+        console.log('# NEW CONNECTION');
+        console.log(socket.handshake);
+        console.log('**************************************************\n')
+
         chat.handleUserConnect(user, (data) => {
             socket.emit(data.event, data);
         });
